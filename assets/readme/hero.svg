@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">同桌 — 局域网文字与文件共享</title>
+  <desc id="desc">一台电脑启动服务，手机和其他电脑通过同一 Wi-Fi 扫码加入，共享文字与文件。</desc>
+
+  <rect width="1200" height="400" rx="28" fill="#f4f8fd"/>
+  <path d="M0 80H1200M0 160H1200M0 240H1200M0 320H1200M80 0V400M160 0V400M240 0V400M320 0V400M400 0V400M480 0V400M560 0V400M640 0V400M720 0V400M800 0V400M880 0V400M960 0V400M1040 0V400M1120 0V400" stroke="#246bfd" stroke-opacity=".055"/>
+
+  <g id="title-block" transform="translate(62 56)">
+    <g>
+      <rect width="48" height="48" rx="13" fill="#246bfd"/>
+      <path d="M43 43l8 8" stroke="#bcd3ff" stroke-width="7" stroke-linecap="round"/>
+      <text x="24" y="33" text-anchor="middle" fill="#fff" font-size="25" font-weight="800" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">同</text>
+    </g>
+    <text x="0" y="92" fill="#246bfd" font-size="18" font-weight="700" letter-spacing="2" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">LOCAL NETWORK SHARING</text>
+    <text x="0" y="167" fill="#17243a" font-size="72" font-weight="800" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">同桌</text>
+    <rect x="0" y="184" width="330" height="10" rx="5" fill="#ffc94a"/>
+    <text x="0" y="235" fill="#17243a" font-size="28" font-weight="650" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">把文字和文件，放到桌上。</text>
+    <text x="0" y="278" fill="#66748a" font-size="20" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">同一个 Wi-Fi · 不登录 · 不经过云端</text>
+  </g>
+
+  <g id="terminal-proof" transform="translate(655 45)">
+    <rect width="483" height="310" rx="20" fill="#17243a"/>
+    <circle cx="26" cy="26" r="5" fill="#ff6b66"/>
+    <circle cx="44" cy="26" r="5" fill="#ffc94a"/>
+    <circle cx="62" cy="26" r="5" fill="#21a66b"/>
+    <text x="88" y="32" fill="#8fa2bc" font-size="16" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">./start.sh</text>
+    <path d="M0 49H483" stroke="#33435b"/>
+    <text x="24" y="82" fill="#dce5f0" font-size="17" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">同桌已启动</text>
+    <text x="24" y="112" fill="#7eabff" font-size="17" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">http://192.168.1.23:8787</text>
+
+    <g id="qr-motif" transform="translate(25 139)" fill="#fff">
+      <rect width="126" height="126" rx="5"/>
+      <g fill="#17243a">
+        <path d="M10 10h35v35H10zm7 7v21h21V17zM81 10h35v35H81zm7 7v21h21V17zM10 81h35v35H10zm7 7v21h21V88z"/>
+        <path d="M53 10h9v9h-9zM64 10h9v18h-9zM53 28h9v17h-9zM53 53h18v9H53zM81 53h9v9h-9zM99 53h17v9H99zM10 53h26v9H10zM28 64h17v9H28zM53 71h9v18h-9zM64 64h17v9H64zM73 82h9v9h-9zM91 71h25v9H91zM91 89h9v27h-9zM107 89h9v9h-9zM53 99h27v9H53zM64 109h18v7H64z"/>
+      </g>
+    </g>
+
+    <g transform="translate(183 150)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif">
+      <text y="15" fill="#fff" font-size="21" font-weight="700">扫码加入这张桌</text>
+      <g transform="translate(0 45)">
+        <rect width="245" height="42" rx="10" fill="#24364f"/>
+        <circle cx="22" cy="21" r="6" fill="#21a66b"/>
+        <text x="40" y="27" fill="#dce5f0" font-size="17">手机 / 平板 / 电脑</text>
+      </g>
+      <text y="119" fill="#8fa2bc" font-size="16">共享便签 · 多文件上传 · ZIP 下载</text>
+    </g>
+  </g>
+</svg>
