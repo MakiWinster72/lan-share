@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#e9f2ff">
+  <title>同桌 · 局域网共享</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="同桌首页">
+      <span class="brand-mark">同</span>
+      <span><strong>同桌</strong><small>局域网共享</small></span>
+    </a>
+    <div class="live"><i></i><span>已连接</span></div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">同一个 Wi-Fi，就坐在同一张桌边</p>
+        <h1>把文字和文件，<br><em>放到桌上。</em></h1>
+        <p>不登录，不绕路。这里保存的内容，其他设备会自动看见。</p>
+      </div>
+      <aside class="qr-card">
+        <img id="qr-code" alt="当前页面的访问二维码" width="150" height="150">
+        <div>
+          <strong>扫码加入这张桌</strong>
+          <button id="copy-address" class="address" type="button" title="复制访问地址"></button>
+        </div>
+      </aside>
+    </section>
+
+    <div class="workspace">
+      <section class="card text-card">
+        <div class="section-head">
+          <div><span class="label">共享便签</span><h2>一段大家都能编辑的文字</h2></div>
+          <span id="save-state" class="quiet">尚未修改</span>
+        </div>
+        <textarea id="shared-text" spellcheck="false" placeholder="粘贴网址、验证码、临时说明……"></textarea>
+        <div class="actions">
+          <span class="hint">每 2 秒检查其他设备的更新</span>
+          <button id="save-text" type="button">保存并同步 <span>⌘↵</span></button>
+        </div>
+      </section>
+
+      <section class="card file-card">
+        <div class="section-head">
+          <div><span class="label">共享文件夹</span><h2>从任意设备放进来</h2></div>
+          <span id="file-count" class="count">0 个文件</span>
+        </div>
+        <label id="drop-zone" class="drop-zone">
+          <input id="file-input" type="file" multiple>
+          <span class="folder-icon">↗</span>
+          <strong>选择文件</strong>
+          <small>可多选，也可以拖到这里</small>
+        </label>
+        <div id="upload-progress" class="progress" hidden><i></i><span>正在上传…</span></div>
+        <div class="file-list-head"><span>桌上的文件</span><span>点击即可下载</span></div>
+        <div id="file-list" class="file-list">
+          <div class="empty">还没有文件。先放一个上来吧。</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

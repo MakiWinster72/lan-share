@@ -1,0 +1,146 @@
+const textArea = document.querySelector("#shared-text");
+const saveButton = document.querySelector("#save-text");
+const saveState = document.querySelector("#save-state");
+const fileInput = document.querySelector("#file-input");
+const dropZone = document.querySelector("#drop-zone");
+const fileList = document.querySelector("#file-list");
+const fileCount = document.querySelector("#file-count");
+const progress = document.querySelector("#upload-progress");
+const progressBar = progress.querySelector("i");
+const toast = document.querySelector("#toast");
+const qrCode = document.querySelector("#qr-code");
+const copyAddress = document.querySelector("#copy-address");
+
+let version = -1;
+let dirty = false;
+let toastTimer;
+
+const shareAddress = `${location.protocol}//${location.host}/`;
+qrCode.src = `/api/qr?text=${encodeURIComponent(shareAddress)}`;
+copyAddress.textContent = shareAddress;
+copyAddress.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(shareAddress);
+    notify("访问地址已复制");
+  } catch {
+    notify("长按地址即可复制");
+  }
+});
+
+function notify(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(1)} MB`;
+  return `${(bytes / 1073741824).toFixed(1)} GB`;
+}
+
+function renderFiles(files) {
+  fileCount.textContent = `${files.length} 个文件`;
+  if (!files.length) {
+    fileList.innerHTML = '<div class="empty">还没有文件。先放一个上来吧。</div>';
+    return;
+  }
+  fileList.replaceChildren(...files.map(file => {
+    const link = document.createElement("a");
+    link.className = "file-item";
+    link.href = file.url;
+    const name = document.createElement("span");
+    name.className = "file-name";
+    name.textContent = file.name;
+    const meta = document.createElement("span");
+    meta.className = "file-meta";
+    meta.textContent = `${formatSize(file.size)} ↓`;
+    link.append(name, meta);
+    return link;
+  }));
+}
+
+async function refresh() {
+  try {
+    const response = await fetch("/api/state", { cache: "no-store" });
+    const state = await response.json();
+    if (state.version !== version) {
+      if (!dirty) textArea.value = state.text;
+      renderFiles(state.files);
+      version = state.version;
+    }
+    document.querySelector(".live span").textContent = "已连接";
+    document.querySelector(".live i").style.background = "";
+  } catch {
+    document.querySelector(".live span").textContent = "连接中断";
+    document.querySelector(".live i").style.background = "#e65c52";
+  }
+}
+
+async function saveText() {
+  saveButton.disabled = true;
+  saveState.textContent = "保存中…";
+  try {
+    const response = await fetch("/api/text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: textArea.value })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    dirty = false;
+    version = data.version;
+    saveState.textContent = "已同步";
+    notify("文字已同步给其他设备");
+  } catch (error) {
+    saveState.textContent = "保存失败";
+    notify(error.message || "保存失败，请重试");
+  } finally {
+    saveButton.disabled = false;
+  }
+}
+
+async function upload(files) {
+  if (!files?.length) return;
+  const form = new FormData();
+  [...files].forEach(file => form.append("files", file));
+  progress.hidden = false;
+  progressBar.style.width = "15%";
+  const request = new XMLHttpRequest();
+  request.open("POST", "/api/upload");
+  request.upload.onprogress = event => {
+    if (event.lengthComputable) progressBar.style.width = `${event.loaded / event.total * 100}%`;
+  };
+  request.onload = async () => {
+    progress.hidden = true;
+    if (request.status >= 200 && request.status < 300) {
+      const data = JSON.parse(request.responseText);
+      notify(`已放入 ${data.files.length} 个文件`);
+      fileInput.value = "";
+      await refresh();
+    } else {
+      notify(JSON.parse(request.responseText).error || "上传失败");
+    }
+  };
+  request.onerror = () => { progress.hidden = true; notify("上传失败，请检查连接"); };
+  request.send(form);
+}
+
+textArea.addEventListener("input", () => { dirty = true; saveState.textContent = "有未保存修改"; });
+saveButton.addEventListener("click", saveText);
+document.addEventListener("keydown", event => {
+  if ((event.ctrlKey || event.metaKey) && event.key === "Enter") saveText();
+});
+fileInput.addEventListener("change", () => upload(fileInput.files));
+["dragenter", "dragover"].forEach(type => dropZone.addEventListener(type, event => {
+  event.preventDefault(); dropZone.classList.add("dragging");
+}));
+["dragleave", "drop"].forEach(type => dropZone.addEventListener(type, event => {
+  event.preventDefault(); dropZone.classList.remove("dragging");
+}));
+dropZone.addEventListener("drop", event => upload(event.dataTransfer.files));
+
+refresh();
+setInterval(refresh, 2000);

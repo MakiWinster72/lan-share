@@ -1,0 +1,4 @@
+shared_files/*
+!shared_files/.gitkeep
+shared_text.txt
+__pycache__/
