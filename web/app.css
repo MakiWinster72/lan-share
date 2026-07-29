@@ -131,5 +131,13 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
   .actions { align-items: stretch; flex-direction: column; }
   .text-buttons { display: grid; grid-template-columns: 1fr 1.4fr; }
   .text-buttons button { width: 100%; }
+  .file-list {
+    max-height: none;
+    overflow: visible;
+    touch-action: pan-y;
+  }
+  .file-item { min-height: 52px; padding: 12px; }
+  .file-check, .select-all input { width: 20px; height: 20px; flex: 0 0 auto; }
+  .download-selected { min-height: 38px; padding-inline: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
