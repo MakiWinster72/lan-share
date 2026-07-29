@@ -1,6 +1,7 @@
 const textArea = document.querySelector("#shared-text");
 const saveButton = document.querySelector("#save-text");
 const copyTextButton = document.querySelector("#copy-text");
+const clearTextButton = document.querySelector("#clear-text");
 const saveState = document.querySelector("#save-state");
 const fileInput = document.querySelector("#file-input");
 const dropZone = document.querySelector("#drop-zone");
@@ -172,6 +173,18 @@ async function copyText() {
   }
 }
 
+function clearText() {
+  if (!textArea.value) {
+    notify("文本框已经是空的");
+    return;
+  }
+  textArea.value = "";
+  dirty = true;
+  saveState.textContent = "有未保存修改";
+  textArea.focus();
+  notify("已清空，保存后同步");
+}
+
 async function upload(files) {
   if (!files?.length) return;
   const form = new FormData();
@@ -201,6 +214,7 @@ async function upload(files) {
 textArea.addEventListener("input", () => { dirty = true; saveState.textContent = "有未保存修改"; });
 saveButton.addEventListener("click", saveText);
 copyTextButton.addEventListener("click", copyText);
+clearTextButton.addEventListener("click", clearText);
 document.addEventListener("keydown", event => {
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") saveText();
 });

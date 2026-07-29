@@ -84,6 +84,10 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
   color: var(--blue); background: var(--blue-pale); box-shadow: none;
   border: 1px solid #c6d9f7;
 }
+.clear-button {
+  color: #b74942; background: #fff2f1; box-shadow: none;
+  border: 1px solid #f0cdca;
+}
 .drop-zone {
   display: grid; place-items: center; text-align: center; min-height: 174px; cursor: pointer;
   border: 1.5px dashed #a7bddc; border-radius: 17px; background: var(--blue-pale); transition: .2s;
@@ -140,7 +144,7 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
   .section-head { gap: 12px; }
   textarea { min-height: 240px; padding: 15px; font-size: 16px; }
   .actions { align-items: stretch; flex-direction: column; }
-  .text-buttons { display: grid; grid-template-columns: 1fr 1.4fr; }
+  .text-buttons { display: grid; grid-template-columns: 1fr .7fr 1.4fr; }
   .text-buttons button { width: 100%; }
   .drop-zone { min-height: 150px; }
   .file-list {
@@ -166,7 +170,7 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
   .card { padding: 16px; border-radius: 17px; }
   h2 { font-size: 17px; }
   .quiet, .count { font-size: 11px; }
-  .text-buttons { grid-template-columns: 1fr 1.3fr; gap: 7px; }
+  .text-buttons { grid-template-columns: 1fr .65fr 1.3fr; gap: 7px; }
   .text-buttons button { padding-inline: 10px; }
   .text-buttons button span { display: none; }
   .file-item { gap: 9px; padding-inline: 10px; }
