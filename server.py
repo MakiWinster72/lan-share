@@ -11,10 +11,12 @@ import os
 import re
 import socket
 import subprocess
+import tempfile
 import threading
 import time
 import urllib.parse
 import uuid
+import zipfile
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -152,6 +154,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.save_text()
         if path == "/api/upload":
             return self.upload_files()
+        if path == "/api/download-zip":
+            return self.download_zip()
         self.send_error(404, "没有这个接口")
 
     def get_state(self) -> None:
@@ -228,6 +232,40 @@ class Handler(BaseHTTPRequestHandler):
         with STATE_LOCK:
             STATE_VERSION += 1
         self.json_response({"ok": True, "files": saved})
+
+    def download_zip(self) -> None:
+        length = int(self.headers.get("Content-Length", "0"))
+        if length <= 0 or length > 1024 * 1024:
+            return self.send_error(400, "下载请求不正确")
+        form = urllib.parse.parse_qs(self.rfile.read(length).decode("utf-8", "replace"))
+        names = form.get("files", [])
+        paths = []
+        for name in names:
+            target = SHARED / safe_filename(name)
+            if target.is_file() and target.parent == SHARED and target not in paths:
+                paths.append(target)
+        if not paths:
+            return self.send_error(400, "没有选择可下载的文件")
+        archive = tempfile.TemporaryFile()
+        with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
+            for path in paths:
+                bundle.write(path, arcname=path.name)
+        size = archive.tell()
+        archive.seek(0)
+        filename = time.strftime("同桌文件_%Y%m%d_%H%M%S.zip")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/zip")
+        self.send_header("Content-Length", str(size))
+        self.send_header(
+            "Content-Disposition",
+            f"attachment; filename*=UTF-8''{urllib.parse.quote(filename)}",
+        )
+        self.end_headers()
+        try:
+            while chunk := archive.read(1024 * 1024):
+                self.wfile.write(chunk)
+        finally:
+            archive.close()
 
     def download_file(self, name: str) -> None:
         target = SHARED / safe_filename(name)

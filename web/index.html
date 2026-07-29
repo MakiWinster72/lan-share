@@ -59,7 +59,10 @@
           <small>可多选，也可以拖到这里</small>
         </label>
         <div id="upload-progress" class="progress" hidden><i></i><span>正在上传…</span></div>
-        <div class="file-list-head"><span>桌上的文件</span><span>点击即可下载</span></div>
+        <div class="file-list-head">
+          <label class="select-all"><input id="select-all" type="checkbox"> <span>全选</span></label>
+          <button id="download-selected" class="download-selected" type="button" disabled>下载所选</button>
+        </div>
         <div id="file-list" class="file-list">
           <div class="empty">还没有文件。先放一个上来吧。</div>
         </div>

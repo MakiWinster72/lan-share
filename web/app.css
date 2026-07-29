@@ -96,14 +96,22 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
 .progress { margin: 12px 0; height: 34px; border-radius: 8px; background: var(--blue-pale); position: relative; overflow: hidden; }
 .progress i { position: absolute; inset: 0 auto 0 0; width: 20%; background: #bdd4ff; transition: width .2s; }
 .progress span { position: relative; display: grid; place-items: center; height: 100%; font-size: 12px; }
-.file-list-head { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin: 22px 2px 8px; }
+.file-list-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; margin: 20px 2px 8px; }
+.select-all { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+.file-check, .select-all input { width: 16px; height: 16px; margin: 0; accent-color: var(--blue); cursor: pointer; }
+.download-selected {
+  padding: 7px 11px; border: 1px solid #c6d9f7; color: var(--blue); background: var(--blue-pale);
+  box-shadow: none; font-size: 11px;
+}
+.download-selected:disabled { cursor: default; opacity: .45; transform: none; }
 .file-list { display: grid; gap: 7px; max-height: 276px; overflow: auto; }
 .file-item {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; color: inherit;
-  text-decoration: none; border: 1px solid var(--line); background: white; border-radius: 11px; padding: 11px 12px;
+  border: 1px solid var(--line); background: white; border-radius: 11px; padding: 11px 12px;
 }
 .file-item:hover { border-color: #a8c3ee; }
-.file-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
+.file-link { min-width: 0; flex: 1; color: inherit; text-decoration: none; }
+.file-name { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
 .file-meta { flex: 0 0 auto; color: var(--muted); font-size: 11px; }
 .empty { color: var(--muted); text-align: center; padding: 28px 10px; font-size: 13px; }
 .toast {

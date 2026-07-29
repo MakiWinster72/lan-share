@@ -9,6 +9,8 @@ const fileCount = document.querySelector("#file-count");
 const progress = document.querySelector("#upload-progress");
 const progressBar = progress.querySelector("i");
 const toast = document.querySelector("#toast");
+const selectAll = document.querySelector("#select-all");
+const downloadSelected = document.querySelector("#download-selected");
 const qrCode = document.querySelector("#qr-code");
 const copyAddress = document.querySelector("#copy-address");
 
@@ -49,8 +51,15 @@ function renderFiles(files) {
     return;
   }
   fileList.replaceChildren(...files.map(file => {
+    const row = document.createElement("div");
+    row.className = "file-item";
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.className = "file-check";
+    check.value = file.name;
+    check.setAttribute("aria-label", `选择 ${file.name}`);
     const link = document.createElement("a");
-    link.className = "file-item";
+    link.className = "file-link";
     link.href = file.url;
     const name = document.createElement("span");
     name.className = "file-name";
@@ -58,9 +67,42 @@ function renderFiles(files) {
     const meta = document.createElement("span");
     meta.className = "file-meta";
     meta.textContent = `${formatSize(file.size)} ↓`;
-    link.append(name, meta);
-    return link;
+    link.append(name);
+    row.append(check, link, meta);
+    return row;
   }));
+  selectAll.checked = false;
+  selectAll.indeterminate = false;
+  updateSelection();
+}
+
+function updateSelection() {
+  const checks = [...document.querySelectorAll(".file-check")];
+  const checked = checks.filter(check => check.checked);
+  selectAll.disabled = checks.length === 0;
+  selectAll.checked = checks.length > 0 && checked.length === checks.length;
+  selectAll.indeterminate = checked.length > 0 && checked.length < checks.length;
+  downloadSelected.disabled = checked.length === 0;
+  downloadSelected.textContent = checked.length ? `下载所选（${checked.length}）` : "下载所选";
+}
+
+function downloadSelection() {
+  const names = [...document.querySelectorAll(".file-check:checked")].map(check => check.value);
+  if (!names.length) return;
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "/api/download-zip";
+  form.hidden = true;
+  names.forEach(name => {
+    const input = document.createElement("input");
+    input.name = "files";
+    input.value = name;
+    form.append(input);
+  });
+  document.body.append(form);
+  form.submit();
+  form.remove();
+  notify(`正在打包 ${names.length} 个文件`);
 }
 
 async function refresh() {
@@ -156,5 +198,13 @@ fileInput.addEventListener("change", () => upload(fileInput.files));
   event.preventDefault(); dropZone.classList.remove("dragging");
 }));
 dropZone.addEventListener("drop", event => upload(event.dataTransfer.files));
+fileList.addEventListener("change", event => {
+  if (event.target.matches(".file-check")) updateSelection();
+});
+selectAll.addEventListener("change", () => {
+  document.querySelectorAll(".file-check").forEach(check => { check.checked = selectAll.checked; });
+  updateSelection();
+});
+downloadSelected.addEventListener("click", downloadSelection);
 
 refresh();
