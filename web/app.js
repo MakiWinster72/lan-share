@@ -1,5 +1,6 @@
 const textArea = document.querySelector("#shared-text");
 const saveButton = document.querySelector("#save-text");
+const copyTextButton = document.querySelector("#copy-text");
 const saveState = document.querySelector("#save-state");
 const fileInput = document.querySelector("#file-input");
 const dropZone = document.querySelector("#drop-zone");
@@ -102,6 +103,19 @@ async function saveText() {
   }
 }
 
+async function copyText() {
+  try {
+    await navigator.clipboard.writeText(textArea.value);
+    notify("文字已复制");
+  } catch {
+    textArea.focus();
+    textArea.select();
+    const copied = document.execCommand("copy");
+    textArea.setSelectionRange(textArea.value.length, textArea.value.length);
+    notify(copied ? "文字已复制" : "复制失败，请手动复制");
+  }
+}
+
 async function upload(files) {
   if (!files?.length) return;
   const form = new FormData();
@@ -130,6 +144,7 @@ async function upload(files) {
 
 textArea.addEventListener("input", () => { dirty = true; saveState.textContent = "有未保存修改"; });
 saveButton.addEventListener("click", saveText);
+copyTextButton.addEventListener("click", copyText);
 document.addEventListener("keydown", event => {
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") saveText();
 });
@@ -143,4 +158,3 @@ fileInput.addEventListener("change", () => upload(fileInput.files));
 dropZone.addEventListener("drop", event => upload(event.dataTransfer.files));
 
 refresh();
-setInterval(refresh, 2000);

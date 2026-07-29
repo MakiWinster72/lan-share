@@ -68,8 +68,8 @@ textarea {
   transition: border .2s, box-shadow .2s;
 }
 textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(36,107,253,.1); }
-.actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 16px; }
-.hint { font-size: 11px; color: var(--muted); }
+.actions { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-top: 16px; }
+.text-buttons { display: flex; gap: 9px; }
 button {
   border: 0; background: var(--blue); color: white; padding: 12px 17px; border-radius: 11px;
   font: 700 14px/1 inherit; cursor: pointer; box-shadow: 0 6px 16px rgba(36,107,253,.2); transition: transform .15s;
@@ -77,6 +77,10 @@ button {
 button:hover { transform: translateY(-1px); }
 button:focus-visible, .drop-zone:focus-within { outline: 3px solid rgba(36,107,253,.25); outline-offset: 3px; }
 button span { opacity: .7; font-size: 11px; margin-left: 9px; }
+.secondary-button {
+  color: var(--blue); background: var(--blue-pale); box-shadow: none;
+  border: 1px solid #c6d9f7;
+}
 .drop-zone {
   display: grid; place-items: center; text-align: center; min-height: 174px; cursor: pointer;
   border: 1.5px dashed #a7bddc; border-radius: 17px; background: var(--blue-pale); transition: .2s;
@@ -117,7 +121,7 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
   .card { padding: 20px; border-radius: 19px; }
   textarea { min-height: 240px; }
   .actions { align-items: stretch; flex-direction: column; }
-  .hint { order: 2; text-align: center; }
-  button { width: 100%; }
+  .text-buttons { display: grid; grid-template-columns: 1fr 1.4fr; }
+  .text-buttons button { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
