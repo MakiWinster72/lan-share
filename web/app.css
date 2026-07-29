@@ -10,6 +10,7 @@
   --shadow: 0 18px 50px rgba(35, 65, 108, .10);
 }
 * { box-sizing: border-box; }
+html { overflow-x: hidden; }
 body {
   margin: 0;
   color: var(--ink);
@@ -20,6 +21,7 @@ body {
   background-size: 28px 28px;
   font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 .masthead {
   max-width: 1180px; margin: auto; padding: 28px 24px;
@@ -41,6 +43,7 @@ body {
 .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(33,166,107,.12); }
 main { max-width: 1180px; margin: auto; padding: 34px 24px 70px; }
 .intro { margin-bottom: 36px; display: flex; justify-content: space-between; align-items: end; gap: 30px; }
+.intro > div, .section-head > div, .qr-card > div { min-width: 0; }
 .eyebrow, .label { color: var(--blue); font-weight: 750; letter-spacing: .08em; font-size: 12px; }
 .intro h1 { margin: 10px 0 14px; font: 800 clamp(38px, 6vw, 70px)/1.08 "STKaiti", "KaiTi", serif; letter-spacing: -.04em; }
 .intro h1 em { color: var(--blue); font-style: normal; position: relative; }
@@ -122,15 +125,24 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 @media (max-width: 760px) {
   .masthead { padding: 19px 18px; }
-  main { padding: 24px 16px 50px; }
+  main { width: 100%; padding: 20px 16px 50px; }
   .intro { margin-bottom: 25px; display: block; }
-  .qr-card { margin-top: 26px; width: 100%; justify-content: center; }
+  .intro h1 { font-size: clamp(40px, 12vw, 56px); }
+  .intro > div > p:last-child { font-size: 14px; line-height: 1.65; }
+  .qr-card {
+    display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px;
+    margin-top: 24px; width: 100%; padding: 11px 15px 11px 11px;
+  }
+  .qr-card img { width: 96px; height: 96px; }
+  .address { width: 100%; max-width: none; min-height: 30px; }
   .workspace { grid-template-columns: 1fr; }
   .card { padding: 20px; border-radius: 19px; }
-  textarea { min-height: 240px; }
+  .section-head { gap: 12px; }
+  textarea { min-height: 240px; padding: 15px; font-size: 16px; }
   .actions { align-items: stretch; flex-direction: column; }
   .text-buttons { display: grid; grid-template-columns: 1fr 1.4fr; }
   .text-buttons button { width: 100%; }
+  .drop-zone { min-height: 150px; }
   .file-list {
     max-height: none;
     overflow: visible;
@@ -139,5 +151,25 @@ button span { opacity: .7; font-size: 11px; margin-left: 9px; }
   .file-item { min-height: 52px; padding: 12px; }
   .file-check, .select-all input { width: 20px; height: 20px; flex: 0 0 auto; }
   .download-selected { min-height: 38px; padding-inline: 14px; }
+  .toast { width: max-content; max-width: calc(100vw - 32px); text-align: center; }
+}
+@media (max-width: 400px) {
+  .masthead { padding: 16px 14px; }
+  .brand-mark { width: 38px; height: 38px; }
+  .live { padding: 8px 10px; font-size: 12px; }
+  main { padding: 16px 12px 42px; }
+  .intro h1 { font-size: 38px; }
+  .eyebrow { font-size: 11px; letter-spacing: .04em; }
+  .qr-card { grid-template-columns: 84px minmax(0, 1fr); }
+  .qr-card img { width: 84px; height: 84px; }
+  .qr-card strong { font-size: 13px; }
+  .card { padding: 16px; border-radius: 17px; }
+  h2 { font-size: 17px; }
+  .quiet, .count { font-size: 11px; }
+  .text-buttons { grid-template-columns: 1fr 1.3fr; gap: 7px; }
+  .text-buttons button { padding-inline: 10px; }
+  .text-buttons button span { display: none; }
+  .file-item { gap: 9px; padding-inline: 10px; }
+  .file-meta { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
