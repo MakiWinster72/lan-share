@@ -121,6 +121,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.serve_static("app.js", "text/javascript; charset=utf-8")
         if parsed.path == "/api/state":
             return self.get_state()
+        if parsed.path == "/api/info":
+            return self.get_info()
         if parsed.path == "/api/qr":
             return self.get_qr(parsed.query)
         if parsed.path.startswith("/files/"):
@@ -147,6 +149,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "public, max-age=3600")
         self.end_headers()
         self.wfile.write(result.stdout)
+
+    def get_info(self) -> None:
+        port = self.server.server_address[1]
+        urls, primary_url = local_ips(port)
+        self.json_response({
+            "accessUrl": f"{primary_url}/" if primary_url else None,
+            "urls": [f"{url}/" for url in urls],
+        })
 
     def do_POST(self) -> None:
         path = urllib.parse.urlparse(self.path).path

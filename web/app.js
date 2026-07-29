@@ -18,9 +18,21 @@ let version = -1;
 let dirty = false;
 let toastTimer;
 
-const shareAddress = `${location.protocol}//${location.host}/`;
-qrCode.src = `/api/qr?text=${encodeURIComponent(shareAddress)}`;
-copyAddress.textContent = shareAddress;
+let shareAddress = `${location.protocol}//${location.host}/`;
+
+async function loadShareAddress() {
+  try {
+    const response = await fetch("/api/info", { cache: "no-store" });
+    const info = await response.json();
+    if (info.accessUrl) shareAddress = info.accessUrl;
+  } catch {
+    // 服务端地址获取失败时，保留当前浏览器地址作为后备。
+  }
+  qrCode.src = `/api/qr?text=${encodeURIComponent(shareAddress)}`;
+  copyAddress.textContent = shareAddress;
+  copyAddress.title = `复制 ${shareAddress}`;
+}
+
 copyAddress.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(shareAddress);
@@ -29,6 +41,8 @@ copyAddress.addEventListener("click", async () => {
     notify("长按地址即可复制");
   }
 });
+
+loadShareAddress();
 
 function notify(message) {
   toast.textContent = message;
