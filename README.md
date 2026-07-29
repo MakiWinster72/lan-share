@@ -16,7 +16,7 @@
 - **灵活下载**：单独下载文件，或全选后打包为 ZIP。
 - **扫码加入**：终端和网页都会显示真实局域网地址对应的二维码。
 - **移动端适配**：窄屏布局、触摸选择和自然页面滚动。
-- **轻量运行**：服务端只使用 Python 标准库。
+- **轻量运行**：文字与文件功能只使用 Python 标准库；二维码功能需要系统安装 `qrencode`。
 
 ## 界面预览
 
@@ -26,11 +26,13 @@
 
 ## 快速开始
 
-### 环境
+### 运行环境
 
-- Python 3.10+
-- [`qrencode`](https://fukuchi.org/works/qrencode/)（用于终端和网页二维码）
-- Linux 或其他可以运行 Shell 脚本的类 Unix 系统
+- Python 3.10 或更高版本
+- Linux、macOS，或能够直接运行 Python 的 Windows
+- 可选的 [`qrencode`](https://fukuchi.org/works/qrencode/)：用于终端和网页二维码
+
+> 不安装 `qrencode` 时，文字共享、文件上传和下载仍然可以使用，但不会显示二维码，需要手动输入终端给出的局域网地址。
 
 Arch Linux：
 
@@ -47,9 +49,17 @@ sudo apt install qrencode
 ### 启动
 
 ```bash
-git clone <你的仓库地址>
+git clone https://github.com/MakiWinster72/lan-share.git
 cd lan-share
 ./start.sh
+```
+
+Windows PowerShell：
+
+```powershell
+git clone https://github.com/MakiWinster72/lan-share.git
+cd lan-share
+python server.py
 ```
 
 终端会显示可以访问的局域网地址和二维码：
@@ -154,7 +164,7 @@ lan-share/
 
 ## 开发
 
-项目没有第三方 Python 依赖。修改后可以运行：
+核心服务没有第三方 Python 包依赖，但二维码由外部的 `qrencode` 程序生成。修改后可以运行：
 
 ```bash
 python3 -m py_compile server.py
@@ -165,4 +175,4 @@ node --check web/app.js
 
 ## License
 
-目前仓库尚未添加开源许可证。在添加许可证前，默认保留所有权利。
+本项目采用 [MIT License](./LICENSE)。你可以使用、复制、修改、发布和分发本项目，但需要保留原始版权与许可声明。
